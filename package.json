@@ -1,0 +1,25 @@
+{
+  "name": "botb-plotter",
+  "version": "1.0.0",
+  "description": "Place your tickets without mouse-pains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsteffensen/botb-plotter.git"
+  },
+  "keywords": [
+    "botb"
+  ],
+  "author": "jsteffensen",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jsteffensen/botb-plotter/issues"
+  },
+  "homepage": "https://github.com/jsteffensen/botb-plotter#readme",
+  "dependencies": {
+    "puppeteer": "^21.6.1"
+  }
+}
