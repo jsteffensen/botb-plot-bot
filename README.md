@@ -1,4 +1,4 @@
-# botb-plotter
+# botb-plot-bot
 Place your tickets based on coordinates in an Excel file ...
 
 ## Pre-requisites
