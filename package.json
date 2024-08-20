@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/jsteffensen/botb-plotter#readme",
   "dependencies": {
-    "puppeteer": "^21.6.1"
+    "puppeteer": "^23.1.0"
   }
 }

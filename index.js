@@ -19,7 +19,7 @@ let coords;
     await page.setViewport({ width: 1200, height: 1100 });
 
     console.log('Go to login');
-    await page.goto('https://www.botb.com/login', { waitUntil: 'networkidle0' });
+	await page.goto('https://www.botb.com/login', { waitUntil: 'domcontentloaded' });
     await delay(2000);
 
     // clear popup special deal by clicking page margin
@@ -90,7 +90,7 @@ async function login(page) {
 async function addPrizeToCart(page, prizeURL) {
 
     console.log('Go to ' + prizeURL);
-    await page.goto(prizeURL, { waitUntil: 'networkidle0' });
+    await page.goto(prizeURL, { waitUntil: 'domcontentloaded' });
     await delay(1000);
 
     // clear popup special deal by clicking page margin
