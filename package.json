@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jsteffensen/botb-plotter.git"
+    "url": "https://github.com/jsteffensen/botb-plot-bot"
   },
   "keywords": [
     "botb"
@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/jsteffensen/botb-plotter#readme",
   "dependencies": {
-    "puppeteer": "^23.1.0"
+    "puppeteer": "^24.22.0"
   }
 }

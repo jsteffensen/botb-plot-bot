@@ -113,9 +113,10 @@ async function goToCompetition(page) {
 
     console.log('Proceed to competition');
 
-    await page.evaluate(() => {
-        document.querySelector('a.proceed').click();
-    });
+    /*await page.evaluate(() => {
+        document.querySelector('a.enter-now-button').click();
+    });*/
+	await page.click('text=PROCEED TO PLAY');
 
     // long wait to load competition
     await delay(4000);
