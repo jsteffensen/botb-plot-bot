@@ -16,7 +16,7 @@ let coords;
     const browser = await puppeteer.launch({headless:false});
 
     const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 1100 });
+    await page.setViewport({ width: 1600, height: 1200 });
 
     console.log('Go to login');
 	await page.goto('https://www.botb.com/login', { waitUntil: 'domcontentloaded' });
@@ -88,43 +88,117 @@ async function login(page) {
 }
 
 async function addPrizeToCart(page, prizeURL) {
-
     console.log('Go to ' + prizeURL);
     await page.goto(prizeURL, { waitUntil: 'domcontentloaded' });
     await delay(1000);
-
     // clear popup special deal by clicking page margin
-	await page.mouse.click(5, 200);
-	
+    await page.mouse.click(5, 200);
+    
     console.log('Enter now');
-    await page.evaluate(() => {
-        document.querySelector('a.enter-now-button').click();
-    });
+    try {
+        await page.waitForSelector('a.enter-now-button', { timeout: 5000 });
+        await page.click('a.enter-now-button');
+    } catch (error) {
+        console.log('\n⚠️  Could not find "Enter Now" button automatically.');
+        console.log('👉 Please click the "Enter Now" button manually in the browser.');
+        
+        await new Promise(resolve => {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            
+            readline.question('Press Enter once you have clicked the button...', () => {
+                readline.close();
+                resolve();
+            });
+        });
+    }
+    
     await delay(1500);
-
+    
     console.log('Add to basket');
-    await page.evaluate(() => {
-        document.querySelector('a.add-to-basket').click();
-    });
+    try {
+        // Wait for element to be visible and stable
+        await page.waitForSelector('a.add-to-basket', { visible: true, timeout: 5000 });
+        
+        // Try multiple click methods
+        try {
+            // Method 1: Regular click
+            await page.click('a.add-to-basket');
+        } catch (e1) {
+            console.log('Regular click failed, trying evaluate click...');
+            try {
+                // Method 2: Force click via evaluate
+                await page.evaluate(() => {
+                    const btn = document.querySelector('a.add-to-basket');
+                    if (btn) btn.click();
+                });
+            } catch (e2) {
+                console.log('Evaluate click failed, trying JavaScript click event...');
+                // Method 3: Dispatch click event
+                await page.evaluate(() => {
+                    const btn = document.querySelector('a.add-to-basket');
+                    if (btn) btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                });
+            }
+        }
+        
+        // Verify if it worked by checking if URL changed or button disappeared
+        await delay(500);
+        const stillExists = await page.$('a.add-to-basket');
+        if (stillExists) {
+            throw new Error('Button still present, click may not have registered');
+        }
+        
+    } catch (error) {
+        console.log('\n⚠️  Could not click "Add to Basket" button automatically.');
+        console.log('👉 Please click the "Add to Basket" button manually in the browser.');
+        
+        await new Promise(resolve => {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            
+            readline.question('Press Enter once you have clicked the button...', () => {
+                readline.close();
+                resolve();
+            });
+        });
+    }
+    
     await delay(3000);
 }
 
 async function goToCompetition(page) {
-
     console.log('Proceed to competition');
-
-    /*await page.evaluate(() => {
-        document.querySelector('a.enter-now-button').click();
-    });*/
-	await page.click('text=PROCEED TO PLAY');
-
+    
+    try {
+        await page.click('text=PROCEED TO PLAY', { timeout: 5000 });
+    } catch (error) {
+        console.log('\n⚠️  Could not find "PROCEED TO PLAY" button automatically.');
+        console.log('👉 Please click the "PROCEED TO PLAY" button manually in the browser.');
+        
+        // Wait for user to press Enter
+        await new Promise(resolve => {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            
+            readline.question('Press Enter once you have clicked the button...', () => {
+                readline.close();
+                resolve();
+            });
+        });
+    }
+    
     // long wait to load competition
     await delay(4000);
-
     // clear popup by clicking page margin
     await page.mouse.click(5, 200);
     await delay(1000);
-
 }
 
 async function setupGame(page) {
